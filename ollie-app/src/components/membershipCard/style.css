@@ -1,0 +1,94 @@
+.main-content-memebership-alternative-card {
+  width: 300px;
+  max-height: 440px;
+  text-align: center;
+  box-shadow: 0px 7px 20px 0px #6470d63d;
+  border-radius: 11px;
+  transition: all .2s;
+  color: #fff;
+  padding: 45px 25px;
+  background: #fff;
+  z-index: 2;
+  background-image: linear-gradient(to right, #a3a8f0, #696fdd); }
+  .main-content-memebership-alternative-card .name {
+    font-size: 18px;
+    color: #fff; }
+  .main-content-memebership-alternative-card .price {
+    font-size: 60px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .main-content-memebership-alternative-card .price .currency {
+      font-size: 35px;
+      font-weight: bold;
+      color: #fff;
+      margin-right: 10px; }
+  .main-content-memebership-alternative-card__buy {
+    padding: 10px; }
+  .main-content-memebership-alternative-card .description-content {
+    padding-bottom: 30px;
+    padding-top: 10px; }
+    .main-content-memebership-alternative-card .description-content .item {
+      padding: 13px;
+      color: #fff; }
+  .main-content-memebership-alternative-card .description-content .item {
+    border-top: 1px solid  #bfc3ff;
+    color: #fff; }
+  .main-content-memebership-alternative-card .description-content .item:last-child {
+    border-bottom: 1px solid  #bfc3ff; }
+  .main-content-memebership-alternative-card .btn-primary {
+    background: #fff;
+    color: #696fdd; }
+
+.main-content-memebership-card {
+  width: 300px;
+  max-height: 440px;
+  text-align: center;
+  box-shadow: 0px 7px 20px 0px #6470d63d;
+  border-radius: 11px;
+  transition: all .2s;
+  color: #494c5f;
+  padding: 25px;
+  background: #fff;
+  z-index: 2;
+  background-image: #fff; }
+  .main-content-memebership-card .name {
+    font-size: 18px;
+    color: #494c5f; }
+  .main-content-memebership-card .price {
+    font-size: 60px;
+    font-weight: bold;
+    color: #494c5f;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .main-content-memebership-card .price .currency {
+      font-size: 35px;
+      font-weight: bold;
+      color: #494c5f;
+      margin-right: 10px; }
+  .main-content-memebership-card__buy {
+    padding: 10px; }
+  .main-content-memebership-card .description-content {
+    padding-bottom: 30px;
+    padding-top: 10px; }
+    .main-content-memebership-card .description-content .item {
+      padding: 13px;
+      color: #494c5f; }
+  .main-content-memebership-card .description-content .item {
+    border-top: 1px solid #b3b5c6;
+    color: #6d708d; }
+  .main-content-memebership-card .description-content .item:last-child {
+    border-bottom: 1px solid #b3b5c6; }
+
+.row-membership-content {
+  display: flex;
+  justify-content: center;
+  height: 440px;
+  align-items: center; }
+  .row-membership-content .main-content-memebership-card:first-child {
+    border-radius: 11px 0 0 11px; }
+  .row-membership-content .main-content-memebership-card:last-child {
+    border-radius: 0 11px 11px 0px; }

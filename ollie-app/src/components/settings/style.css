@@ -1,0 +1,15 @@
+.main-settings .settings-title {
+  text-align: center;
+  font-size: 25px; }
+
+.main-settings .settings-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px; }
+  .main-settings .settings-content__label {
+    padding: 0 15px; }
+  .main-settings .settings-content .chakra-switch .chakra-switch__thumb {
+    background: #fff !important; }
+  .main-settings .settings-content .chakra-switch span[data-checked] {
+    background-image: linear-gradient(to right, #a3a8f0, #696fdd); }

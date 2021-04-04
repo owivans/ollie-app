@@ -1,0 +1,26 @@
+
+.main-settings {
+  .settings-title {
+    text-align: center;
+    font-size: 25px;
+  }
+  .settings-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+
+    &__label {
+      padding: 0 15px;
+    }
+    .chakra-switch {
+      .chakra-switch__thumb {
+        background: #fff!important;
+      }
+      span[data-checked] {
+        background-image: linear-gradient(to right, hsl(236, 72%, 79%), hsl(237, 63%, 64%));
+      }
+    }
+  }
+}
+
