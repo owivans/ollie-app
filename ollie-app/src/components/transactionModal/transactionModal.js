@@ -1,76 +1,104 @@
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import axios from 'axios';
-
+import {
+  CardExpiryElement,
+  CardNumberElement,
+  CardCvcElement,
+} from '@stripe/react-stripe-js';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
-  Lorem,
+  Input,
 } from "@chakra-ui/react"
+
+import { handleError, getBrandCard } from './helper';
+
+import './style.css';
 
 const CheckoutForm = ({
   handleModal,
   isOpen,
+  handleSubmit,
+  isLoading,
+  handleCardNumber,
+  isErrorNumberCard,
+  brandCard,
+  handleFullName,
+  fullName,
+  dataToPayment,
 }) => {
-
-  const stripePromise = loadStripe('pk_test_51IbuRrAlFqtdQ1Jg64Y37ZMFqY800U2V3QvnwbNYOXWHADJVUQgQZ0s88BoLtKNNQ8HmZpTF7OEUp1USv6QFZUCv00vHzuads9');
-
-
-  const stripe = useStripe();
-  const elements = useElements();
-
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type:'card',
-      card: elements.getElement(CardElement)
-    })
-    if(!error) {
-      const { id } = paymentMethod;
-      try {
-        const { data} = await axios.post('http://localhost:3000/checkoutPayment/membershipType', {
-          id,
-          amount: 10000,
-        });
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
-      elements.getElement(CardElement).clear();
-    }
-  };
-
   return (
     <>
-     <Modal isOpen={isOpen} onClose={handleModal}>
+      <Modal isOpen={isOpen} onClose={handleModal} size={'4xl'}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Payment Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <CardElement/>
-          <form onSubmit={handleSubmit}>
-            <button>Buy</button>
-          </form>
+            {isLoading && 'loading....'}
+            <div className='main-content'>
+              <div className='main-content__card-interaction'>
+                <div className='card'>
+                  <div className='card__ship' />
+                  <div className='card__number'>XXXX XXXX XXXX XXXX</div>
+                  <div className='card__brand'>
+                    <img
+                      src={getBrandCard[brandCard]}
+                      height='30px'
+                      alt={getBrandCard[brandCard]}
+                    />
+                  </div>
+                  <div className='card__name'>{fullName}</div>
+                </div>
+              </div>
+              <div className='main-details'>
+                <form onSubmit={(event) => handleSubmit(event)}>
+                  <div className='main-details__row-name'>
+                    <label>
+                      Full name
+                      <Input
+                        name='fullName'
+                        variant="filled"
+                        onChange={({ target }) => handleFullName(target.value)}
+                      />
+                    </label>
+                  </div>
+                  <div className='main-details__row-name'>
+                    <label>
+                      Card Number
+                      <CardNumberElement
+                        onChange={({
+                          brand,
+                          error
+                        }) => handleCardNumber({ brand, error })
+                      }
+                      />
+                      {isErrorNumberCard ? handleError(isErrorNumberCard.message) : null}
+                    </label>
+                  </div>
+                  <div className='main-details__row-card'>
+                    <label>
+                      Expiration date
+                    <CardExpiryElement />
+                    </label>
+                    <label>
+                      CVC
+                    <CardCvcElement />
+                    </label>
+                  </div>
+                  <div className='button-modal-main'>
+                    <button className='btn-primary'>
+                      <span className='light-text'>Buy</span> {`$${dataToPayment?.price || 0.00}`}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleModal}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
-
-    <Button onClick={handleModal}>Open Modal</Button>
-
     </>
   )
 };

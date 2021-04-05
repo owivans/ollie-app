@@ -1,48 +1,117 @@
-import React, { Component } from 'react';
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
+import React, { useState } from 'react';
+import {
+  useStripe,
+  useElements,
+  CardNumberElement
+} from '@stripe/react-stripe-js';
+import axios from 'axios';
+
+import {
+  useToast
+} from "@chakra-ui/react"
 
 import MembershipCard from '../membershipCard/membershipCard';
 import TransactionModal from '../transactionModal/transactionModal';
 import Settings from '../settings/Settings';
 
-class PricingView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      isChecked: false,
-      currentMembershipType: 'annually',
-    };
-  }
+const PricingView = () => {
+  const [isOpen, setOpen] = useState(false);
+  const [isChecked, setChecked] = useState(false);
+  const [currentMembershipType, setCurrentMembershipType] = useState('annually');
+  const [dataToPayment, setDataToPayment] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [isBrandCard, setBrandCard] = useState('unknow');
+  const [isErrorNumberCard, setErrorNumberCard] = useState(null);
+  const [isFullName, setFullName] = useState('');
 
-  handleModal = () => {
-    const { isOpen } = this.state;
-    this.setState({isOpen: !isOpen})
+  const stripe = useStripe();
+  const elements = useElements();
+  const toast = useToast()
+
+  const handleModal = (dataMembership) => {
+    setOpen(!isOpen);
+    setDataToPayment(dataMembership)
+    console.log(dataMembership)
   };
 
-  handleMembershipType = (event) => {
-    const { isChecked } = this.state;
-    const currentMembershipType = isChecked  === true ? 'monthly' : 'annually';
-    this.setState({ isChecked: !isChecked, currentMembershipType })
+  const handleCardNumber = ({ brand, error}) => {
+    setBrandCard(brand);
+    setErrorNumberCard(error);
   };
 
-  render () {
-    const { isOpen, isChecked, currentMembershipType } = this.state;
-    return (
-      <div>
-        <TransactionModal handleModal={this.handleModal} isOpen={isOpen} />
-        <Settings
-          handleMembershipType={this.handleMembershipType}
-          isChecked={isChecked}
-        />
-        <MembershipCard
-          currentMembershipType={currentMembershipType}
-          handleModal={this.handleModal}
-        />
-      </div>
-    )
+  const handleFullName = (value) => {
+    setFullName(value);
   };
+
+  const handleSubmit = async (e) => {
+    setLoading(true)
+    e.preventDefault();
+    const { name, price, currentMembershipType } = dataToPayment;
+    const cardElement = elements.getElement(CardNumberElement);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+      billing_details: {
+        name,
+      },
+    })
+
+    if (!error) {
+      const { id } = paymentMethod;
+      try {
+        const { data } = await axios.post('http://localhost:3000/checkoutPayment/membershipType', {
+          id,
+          amount: Number(price) * 100,
+          description: `${name} membership ${currentMembershipType}`,
+        });
+        setLoading(false)
+        setOpen(false);
+        toast({
+          title: 'Payment successfull',
+          status: 'success',
+          position: 'top-right',
+          isClosable: true,
+        })
+        console.log(data)
+      } catch (error) {
+        setLoading(false)
+        console.log(error)
+      }
+      elements.getElement(cardElement).clear();
+    }
+  };
+
+  const handleMembershipType = () => {
+    setChecked(!isChecked);
+    const membershipType = isChecked === true ? 'annually' : 'monthly';
+    setCurrentMembershipType(membershipType);
+  };
+
+  return (
+    <>
+      <TransactionModal
+        handleModal={handleModal}
+        isOpen={isOpen}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        handleCardNumber={handleCardNumber}
+        isErrorNumberCard={isErrorNumberCard}
+        brandCard={isBrandCard}
+        handleFullName={handleFullName}
+        fullName={isFullName}
+        dataToPayment={dataToPayment}
+      />
+      <Settings
+        handleMembershipType={handleMembershipType}
+        isChecked={isChecked}
+      />
+      <MembershipCard
+        currentMembershipType={currentMembershipType}
+        handleModal={handleModal}
+        stripe={stripe}
+      />
+    </>
+  )
 };
 
 export default PricingView;

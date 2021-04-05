@@ -4,14 +4,15 @@ import membershipTypes from '../../constants/membershipTypes';
 
 import './style.css';
 
-const Membership = ({ currentMembershipType, handleModal }) => {
+const Membership = ({ currentMembershipType, handleModal, stripe }) => {
   const dataMembership = membershipTypes[currentMembershipType];
   if (dataMembership && dataMembership.length < 1) {
-    return 'vacio'
+    return 'not results'
   }
   return (
     <div className='row-membership-content'>
       {dataMembership.map(({ name, price, capacity, usersAllowed, sendUp }) => {
+        console.log(Number(price), 'Number(price)')
         return (
           <div className={`main-content-memebership${name === 'Professional' ? '-alternative-card' : '-card'}`}>
             <div className='name'>{name}</div>
@@ -23,6 +24,7 @@ const Membership = ({ currentMembershipType, handleModal }) => {
             </div>
             <div className='main-content-memebership__buy'>
               <button
+                disabled={!stripe}
                 className='btn-primary'
                 onClick={() => handleModal({
                   name,

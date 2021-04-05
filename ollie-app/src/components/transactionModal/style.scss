@@ -1,0 +1,91 @@
+
+
+.main-content {
+  display: flex;
+  margin-bottom: 35px;
+  .main-content {
+
+    &__card-interaction {
+      width: 50%;
+      padding-top: 40px;
+
+      .card {
+        width: 300px;
+        height: 178px;
+        position: relative;
+        margin: 0 auto;
+        background-image: linear-gradient(to right, #4b55da, #696fdd);
+        overflow: hidden;
+        z-index: 1;
+        padding: 30px;
+        position: relative;
+
+        -webkit-border-radius: 14px;
+           -moz-border-radius: 14px;
+                border-radius: 14px;
+
+        -webkit-box-shadow: 0 15px 24px rgba(37,44,65,0.32);
+           -moz-box-shadow: 0 15px 24px rgba(37,44,65,0.32);
+                box-shadow: 0 15px 24px rgba(37,44,65,0.32);
+
+        &__number {
+          color:#fff;
+          font-size: 15px;
+          letter-spacing: 3px;
+
+        }
+        &__ship {
+          width: 30px;
+          border-radius: 5px;
+          height: 25px;
+          background-color: #fff3 ;
+          margin-bottom: 18px;
+          background-image: url('../../assets/chip.svg');
+          background-repeat: no-repeat;
+        }
+        &__brand {
+          width: 60px;
+          height: 30px;
+          position: absolute;
+          bottom: 30px;
+          right: 30px;
+          img{
+            height: 30px;
+          }
+        }
+        &__name {
+          color:#fff;
+          font-size: 15px;
+          position: absolute;
+          bottom: 30px;
+          left: 30px
+        }
+      }
+    }
+  }
+  .main-details {
+    width: 50%;
+    form {
+      width: 70%;
+      margin: auto;
+    }
+    &__row-name {
+      margin-top: 15px;
+      .chakra-input {
+        margin-right: 0;
+        max-width: none;
+      }
+    }
+    &__row-card {
+      margin-top: 15px;
+      display: flex;
+      label:first-child {
+        margin: 0;
+      }
+      label {
+        width: 50%;
+        margin-left: 10px;
+      }
+    }
+  }
+}
